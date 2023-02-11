@@ -1,0 +1,72 @@
+'''
+projekt_2.py: Druhý projekt do Engeto Online Python Akademie
+
+author: Tomáš Paluzga
+email: tomas.paluzga@gmail.com
+discord: Tomas P.#5811
+'''
+#Pozdrav
+jmeno = input('Zadej své jméno: ')
+print(f'Ahoj  {jmeno},\nvygeneroval jsem 4 náhodné čísla,',
+'\nzkus je uhádnout')
+
+#Import modulu
+import random
+
+#Seznam číslic z čísla
+def Cisla(cislo):
+    return [int(i) for i in str(cislo)]
+
+#Vrátí True jestli se číslo neopakuje, jinak vyhodnotí False
+def Opakovani(cislo):
+    cislo_1 = Cisla(cislo)
+    if len(cislo_1) == len(set(cislo_1)):
+        return True
+    else:
+        return False
+
+#generuje 4 neopakujícíse čísla
+def Generovani():
+    while True:
+        cislo = random.randint(1000,9999)
+        if Opakovani(cislo):
+            return cislo
+
+#Vrátí uhodnutá čísla jako "bulls" a špatná jako "cows"
+def CislaBullsCows(cislo,tipuj):
+    bull_cow = [0,0]
+    cislo_1 = Cisla(cislo)
+    tip_1 = Cisla(tipuj)
+      
+    for a,b in zip(cislo_1,tip_1):
+        if b in cislo_1:
+            if b == a:
+                bull_cow[0] += 1
+            else:
+                bull_cow[1] += 1
+    return bull_cow
+
+#Počet pokusů
+cislo = Generovani()
+pokusy =int(input('Vlož počet pokusů: '))
+
+#Hra do uhádnutí, nebo vyčerpání pokusů
+while pokusy > 0:
+    tipuj = int(input('Zadej svůj tip: '))
+      
+    if not Opakovani(tipuj):
+        print('Číslo by se nemělo opakovat, zkus to znova! ')
+        continue
+    if tipuj < 1000 or tipuj > 9999:
+        print('Zadání jsou 4 čísla, zkus to znova! ')
+        continue
+      
+    bull_cow = CislaBullsCows(cislo,tipuj)
+    print(f'{bull_cow[0]} bulls, {bull_cow[1]} cows')
+    pokusy -=1
+      
+    if bull_cow[0] == 4:
+        print('Uhádl jsi!')
+        break
+else:
+    print(f'Počet pokusů vypršel,\nHádané číslo bylo: {cislo}')
